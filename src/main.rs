@@ -7,10 +7,10 @@ struct Grid {
 impl Grid { 
     fn new() -> Grid { 
         let init_grid = [
-        [0, 0, 0, 0], 
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0]
+            [0, 0, 0, 0], 
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0]
         ];
         Grid { 
             grid: init_grid
@@ -44,13 +44,10 @@ impl Grid {
 
             if self.grid[rand_x][rand_y] == 0 { 
                 self.grid[rand_x][rand_y] = 2;
-                println!("found an empty cell at x: {}, y: {}", rand_x, rand_y);
                 break;
-
             }
-            
+        
         }
-
     } 
     
     fn has_empty_space(&self) -> bool { 
@@ -63,12 +60,43 @@ impl Grid {
         }
         false
     }
+
+    fn has_equal_neighbor(&self) -> bool { 
+        for x in 0..4 { 
+            for y in 0..4 { 
+                if y < 3 { 
+                    if self.grid[x][y] == self.grid[x][y+1] { 
+                        return true;
+                    }
+                }
+
+                if x < 3 { 
+                    if self.grid[x][y] == self.grid[x+1][y] { 
+                        return true;
+                    }
+                }
+            }
+        }
+        false
+    }
+}
+
+enum Direction { 
+    LEFT,
+    RIGHT,
+    UP,
+    DOWN
 }
 
 fn main() {
     let mut game_board: Grid = Grid::new(); 
-    game_board.print_grid();
-    assert_eq!(game_board.has_empty_space(), true);
-    game_board.generate_square();
-    game_board.print_grid();
+
+    loop { 
+        game_board.print_grid();
+        game_board.generate_square();
+        if !game_board.has_empty_space() { 
+            break;
+        }
+    }
+    
 }
